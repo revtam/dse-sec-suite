@@ -1,0 +1,42 @@
+version: '3.6'
+
+services:
+  ms-calc:
+    build: ./mscalc
+    restart: always
+    ports:
+      - "8104:8104/udp"
+      - "8106:8106/udp"
+      - "8107:8107/udp"
+      - "8108:8108/udp"
+      - "8109:8109/udp"
+    depends_on:
+      - communication-service-broker
+    networks:
+      - default
+  ms-bill:
+    build: ./msbill
+    restart: always
+    ports:
+      - "8105:8105/udp"
+    networks:
+      - default
+  communication-service-broker:
+    build: ./communication-service-broker
+    restart: always
+    ports:
+      - "8081:8081/tcp"
+      - "8100:8100/udp"
+    networks:
+      - default
+  web-clnt:
+    build: ./web_clnt
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

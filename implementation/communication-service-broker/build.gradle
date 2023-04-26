@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+    }
+}
+
+plugins {
+    id 'java'
+    id "com.jfrog.artifactory" version "4.28.3"
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'maven-publish'
+
+}
+
+group 'at.ac.univie.dse.cs'
+version = '0.1.2-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://iotdseunivie.jfrog.io/artifactory/default-maven-local"
+        credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+            username = "ismailhamzeh81@gmail.com"
+            password =  "AKCp8mYy1u9zdN2LXBvcFVBdEa5Ks2NRMdnqerBDBmi3nzNkP4jEfXvF9EC2eXST329v1nZqR"
+        }
+    }
+}
+
+apply plugin: "com.jfrog.artifactory"
+apply plugin: "java"
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+

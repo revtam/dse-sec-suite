@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+    }
+}
+
+plugins {
+    id 'java'
+    id "com.jfrog.artifactory" version "4.28.3"
+    id 'maven-publish'
+}
+
+
+group 'at.ac.univie.dse'
+version '0.0.1-SNAPSHOT'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://iotdseunivie.jfrog.io/artifactory/default-maven-local"
+        credentials {               // Optional resolver credentials (leave out to use anonymous resolution)
+            username = "ismailhamzeh81@gmail.com"
+            password =  "AKCp8mYy1u9zdN2LXBvcFVBdEa5Ks2NRMdnqerBDBmi3nzNkP4jEfXvF9EC2eXST329v1nZqR"
+        }
+    }
+
+}
+
+apply plugin: "com.jfrog.artifactory"
+apply plugin: "java"
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+
+dependencies {
+    implementation group: 'at.ac.univie.dse.cs', name: 'communication-service', version: '0.1.11-SNAPSHOT'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                'Main-Class': 'at.ac.univie.dse.msbill.MSBillApplication'
+        )
+    }
+    from configurations.runtimeClasspath.collect { zipTree(it) }
+}
+

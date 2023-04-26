@@ -1,0 +1,21 @@
+version: '3.6'
+
+services:
+  ms-bill:
+    build: ../../msbill
+    restart: always
+    ports:
+      - "8105:8105/udp"
+    networks:
+      - default
+  communication-service-broker:
+    build: ./cs-instance
+    restart: always
+    ports:
+      - "8081:8081/tcp"
+      - "8100:8100/udp"
+    networks:
+      - default
+networks:
+  default:
+    driver: bridge
